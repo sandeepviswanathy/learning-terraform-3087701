@@ -56,7 +56,7 @@ module "asg" {
 module "module_alb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name    = "blog-ysani-alb"
+  name    = "blog-ysani-alb2"
   vpc_id  = module.blog_ysani_vpc.vpc_id
   subnets = module.blog_ysani_vpc.public_subnets
   security_groups = [module.blog_ysani_sg.security_group_id]
