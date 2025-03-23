@@ -30,17 +30,20 @@ module "blog_ysani_vpc" {
   }
 }
 
-resource "aws_instance" "blog_ysani" {
-  ami           = data.aws_ami.app_ami.id
-  instance_type = var.instance_type
+module "autoscaling" {
+  source  = "terraform-aws-modules/autoscaling/aws"
+  version = "8.1.0"
 
-  vpc_security_group_ids = [module.blog_ysani_sg.security_group_id]
+  # Autoscaling group
+  name = "blog-ysani-asg"
 
-  subnet_id = module.blog_ysani_vpc.public_subnets[0]
-  
-  tags = {
-    Name = "LearningTerraform"
-  }
+  min_size                  = 1
+  max_size                  = 2
+  vpc_zone_identifier       = module.blog_ysani_vpc.public_subnets
+
+  #template
+  image_id          = data.aws_ami.app_ami.id
+  instance_type     = var.instance_type
 }
 
 module "alb" {
@@ -67,7 +70,7 @@ module "alb" {
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
-      target_id        = aws_instance.blog_ysani.id
+      target_id        = module.autoscaling.blog-ysani-asg.autoscaling_group_id
     }
   }
 
