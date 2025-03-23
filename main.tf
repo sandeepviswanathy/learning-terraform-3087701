@@ -22,7 +22,7 @@ resource "aws_instance" "blog_ysani" {
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type
 
-  vpc_security_group_ids = [aws_security_group.blog.id]
+  vpc_security_group_ids = [aws_security_group.blog_ysani.id]
 
   tags = {
     Name = "Learning Terraform"
@@ -30,7 +30,7 @@ resource "aws_instance" "blog_ysani" {
 }
 
 resource "aws_security_group" "blog_ysani" {
-  name        = "blog"
+  name        = "blog_ysani"
   description = "Allow http and https in. allow every thing out"
 
   vpc_id = data.aws_vpc.default.id
@@ -43,7 +43,7 @@ resource "aws_security_group_rule" "blog_ysani_http_in" {
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
 
-  security_group_id = aws_security_group.blog.id
+  security_group_id = aws_security_group.blog_ysani.id
 }
 
 resource "aws_security_group_rule" "blog_ysani_https_in" {
@@ -53,7 +53,7 @@ resource "aws_security_group_rule" "blog_ysani_https_in" {
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
 
-  security_group_id = aws_security_group.blog.id
+  security_group_id = aws_security_group.blog_ysani.id
 }
 
 resource "aws_security_group_rule" "blog_ysani_everything_out" {
@@ -63,5 +63,5 @@ resource "aws_security_group_rule" "blog_ysani_everything_out" {
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
 
-  security_group_id = aws_security_group.blog.id
+  security_group_id = aws_security_group.blog_ysani.id
 }
