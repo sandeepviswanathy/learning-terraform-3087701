@@ -70,7 +70,6 @@ module "alb" {
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
-      target_id        = module.autoscaling.blog-ysani-asg.autoscaling_group_id
     }
   }
 
