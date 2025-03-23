@@ -77,7 +77,7 @@ module "alb" {
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
-      create_attachments = false
+      create_attachment = false
     }
   }
 
