@@ -46,7 +46,7 @@ resource "aws_instance" "blog_ysani" {
 module "alb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name    = "blog_ysani-alb"
+  name    = "blog-ysani-alb"
   vpc_id  = module.blog_ysani_vpc.vpc_id
   subnets = module.blog_ysani_vpc.public_subnets
   security_groups = [module.blog_ysani_sg.security_group_id]
@@ -60,7 +60,7 @@ module "alb" {
 
   target_groups = {
     ex-instance = {
-      name_prefix      = "blog_ysani-"
+      name_prefix      = "blog-"
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
