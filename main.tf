@@ -46,7 +46,7 @@ module "asg" {
   instance_type     = var.instance_type
 
   traffic_source_attachments = {
-    traffic_source = {
+    alb = {
       traffic_source_identifier = module.alb.target_groups["ex-instance"].arn
       traffic_source_type       = "elbv2"
     }
