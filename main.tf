@@ -46,14 +46,14 @@ module "asg" {
   instance_type     = var.instance_type
 
   traffic_source_attachments = {
-    ex-alb = {
-      traffic_source_identifier = module.alb.target_groups["ex-instance"].arn
+    traffic_source = {
+      traffic_source_identifier = module.module_alb.target_groups["ex-instance"].arn
       type       = "elbv2"
     }
   }
 }
 
-module "alb" {
+module "module_alb" {
   source = "terraform-aws-modules/alb/aws"
 
   name    = "blog-ysani-alb"
