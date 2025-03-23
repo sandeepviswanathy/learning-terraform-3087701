@@ -6,6 +6,6 @@ output "instance_arn" {
   value = aws_instance.blog_ysani.arn
 }
 
-outupt "instance_public_dns" {
+output "instance_public_dns" {
   value = aws_instance.blog_ysani.public_dns
 }
