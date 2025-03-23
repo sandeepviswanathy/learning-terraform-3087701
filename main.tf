@@ -43,6 +43,37 @@ resource "aws_instance" "blog_ysani" {
   }
 }
 
+module "alb" {
+  source = "terraform-aws-modules/alb/aws"
+
+  name    = "blog_ysani-alb"
+  vpc_id  = module.blog_ysani_vpc.vpc_id
+  subnets = module.blog_ysani_vpc.public_subnets
+  security_groups = [module.blog_ysani_sg.security_group_id]
+
+  listeners = {
+    ex-http = {
+      port     = 80
+      protocol = "HTTP"
+    }
+  }
+
+  target_groups = {
+    ex-instance = {
+      name_prefix      = "blog_ysani-"
+      protocol         = "HTTP"
+      port             = 80
+      target_type      = "instance"
+      target_id        = aws_instance.blog_ysani.id
+    }
+  }
+
+  tags = {
+    Environment = "dev"
+    Project     = "Example"
+  }
+}
+
 module "blog_ysani_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.3.0"
