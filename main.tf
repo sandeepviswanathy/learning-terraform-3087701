@@ -30,7 +30,7 @@ module "blog_ysani_vpc" {
   }
 }
 
-module "autoscaling" {
+module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "8.1.0"
 
@@ -70,7 +70,7 @@ module "alb" {
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
-      target_id        = module.blog-ysani-asg.autoscaling_group_id
+      target_id        = module.asg.autoscaling_group_id
     }
   }
 
