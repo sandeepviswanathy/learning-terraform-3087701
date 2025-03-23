@@ -45,7 +45,7 @@ module "asg" {
   image_id          = data.aws_ami.app_ami.id
   instance_type     = var.instance_type
 
-  traffic_source_attachment = {
+  traffic_source_attachments = {
     traffic_source = {
       identifier = module.alb.target_groups[ex-instance].arn
       type       = "elbv2"
