@@ -25,7 +25,7 @@ resource "aws_instance" "blog_ysani" {
   vpc_security_group_ids = [aws_security_group.blog_ysani.id]
 
   tags = {
-    Name = "Learning Terraform"
+    Name = "LearningTerraform"
   }
 }
 
