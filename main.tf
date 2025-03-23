@@ -40,7 +40,8 @@ module "asg" {
   min_size                  = 1
   max_size                  = 2
   vpc_zone_identifier       = module.blog_ysani_vpc.public_subnets
-
+  security_groups           = module.blog_ysani_sg.security_group_id
+  
   #template
   image_id          = data.aws_ami.app_ami.id
   instance_type     = var.instance_type
