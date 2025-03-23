@@ -47,8 +47,8 @@ module "asg" {
 
   traffic_source_attachments = {
     traffic_source = {
-      identifier = module.alb.target_groups["ex-instance"].arn
-      type       = "elbv2"
+      traffic_source_identifier = module.alb.target_groups["ex-instance"].arn
+      traffic_source_type       = "elbv2"
     }
   }
 }
@@ -77,7 +77,7 @@ module "alb" {
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
-      target_id        = module.asg.autoscaling_group_id
+      create_attachments = false
     }
   }
 
