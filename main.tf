@@ -61,6 +61,8 @@ module "module_alb" {
   subnets = module.blog_ysani_vpc.public_subnets
   security_groups = [module.blog_ysani_sg.security_group_id]
 
+  enable_deletion_protection = false
+
   listeners = {
     ex-http = {
       port     = 80
