@@ -1,3 +1,3 @@
 output "alb_url" {
-    module.module_alb.dns_name
+    value = module.module_alb.dns_name
 }
