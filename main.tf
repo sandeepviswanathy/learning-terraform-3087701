@@ -3,7 +3,7 @@ data "aws_ami" "app_ami" {
 
   filter {
     name   = "name"
-    values = ["bitnami-tomcat-*-x86_64-hvm-ebs-nami"]
+    values = [var.ami_filter.name]
   }
 
   filter {
@@ -11,21 +11,21 @@ data "aws_ami" "app_ami" {
     values = ["hvm"]
   }
 
-  owners = ["979382823631"] # Bitnami
+  owners = [var.ami_filter.owner]
 }
 
 module "blog_ysani_vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "dev"
-  cidr = "10.0.0.0/16"
+  name = var.environment.name
+  cidr = "${var.environment.network_prefix}.0.0/16"
 
   azs             = ["us-west-2a", "us-west-2b", "us-west-2c"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  public_subnets  = ["${var.environment.network_prefix}.101.0/24", "${var.environment.network_prefix}.102.0/24", "${var.environment.network_prefix}.103.0/24"]
 
   tags = {
     Terraform = "true"
-    Environment = "dev"
+    Environment = var.environment.name
   }
 }
 
@@ -36,8 +36,8 @@ module "asg" {
   # Autoscaling group
   name = "blog-ysani-asg"
 
-  min_size                  = 1
-  max_size                  = 2
+  min_size                  = var.asg_min_size
+  max_size                  = var.asg_max_size
   vpc_zone_identifier       = module.blog_ysani_vpc.public_subnets
   security_groups           = [module.blog_ysani_sg.security_group_id]
 
@@ -48,7 +48,7 @@ module "asg" {
   traffic_source_attachments = {
     traffic_source = {
       traffic_source_identifier = module.module_alb.target_groups["ex-instance"].arn
-      type       = "elbv2"
+      type                      = "elbv2"
     }
   }
 }
@@ -56,7 +56,7 @@ module "asg" {
 module "module_alb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name    = "blog-ysani-alb2"
+  name    = "blog-ysani-alb"
   vpc_id  = module.blog_ysani_vpc.vpc_id
   subnets = module.blog_ysani_vpc.public_subnets
   security_groups = [module.blog_ysani_sg.security_group_id]
@@ -73,7 +73,7 @@ module "module_alb" {
 
   target_groups = {
     ex-instance = {
-      name_prefix      = "blog-"
+      name_prefix      = "${var.environment.name}-"
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
@@ -82,15 +82,15 @@ module "module_alb" {
   }
 
   tags = {
-    Environment = "dev"
-    Project     = "Example"
+    Environment = var.environment.name
+    Project     = "ysani-blog"
   }
 }
 
 module "blog_ysani_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.3.0"
-  name    = "blog_ysani_new"
+  name    = "blog_ysani_${var.environment.name}_sg"
 
   vpc_id = module.blog_ysani_vpc.vpc_id
   
