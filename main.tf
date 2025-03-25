@@ -95,6 +95,8 @@ module "blog_ysani_sg" {
   name    = "blog_ysani_${var.environment.name}_sg"
 
   vpc_id = module.blog_ysani_vpc.vpc_id
+
+  delete_timeout = "1m"
   
   ingress_rules       = ["http-80-tcp","https-443-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
