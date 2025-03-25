@@ -103,4 +103,7 @@ module "blog_ysani_sg" {
 
   egress_rules       = ["all-all"]
   egress_cidr_blocks = ["0.0.0.0/0"]
+  lifecycle {
+    create_before_destroy = true
+  }
 }
