@@ -96,6 +96,7 @@ module "blog_ysani_sg" {
 
   vpc_id = module.blog_ysani_vpc.vpc_id
 
+  create_timeout = "2m"
   delete_timeout = "1m"
   
   ingress_rules       = ["http-80-tcp","https-443-tcp"]
@@ -103,7 +104,4 @@ module "blog_ysani_sg" {
 
   egress_rules       = ["all-all"]
   egress_cidr_blocks = ["0.0.0.0/0"]
-  lifecycle {
-    create_before_destroy = true
-  }
 }
