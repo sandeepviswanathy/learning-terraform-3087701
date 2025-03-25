@@ -1,3 +1,3 @@
 output "environment_url" {
-    value = module.qa.dns_name
+    value = module.qa.environment_url
 }
